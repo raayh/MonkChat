@@ -8,6 +8,9 @@ import { ChatButton, ChatInput, ChatTextArea } from '../../components/outros/inp
 
 import { useState, useRef } from 'react';
 
+import Cookies from 'js-cookie'
+import {useHistory} from 'react-router-dom'
+
 import Api from '../../service/api';
 const api = new Api();
 
@@ -52,7 +55,7 @@ export default function Conteudo() {
     }
 
     const enviarMensagem = async (event) => {
-        if (!(event && event.ctrlKey && event.charCode == 13))
+        if (event.type === "Keypress" && (!event.ctrlKey || event.charCode !== 13))
             return;
 
         const resp = await api.inserirMensagem(sala, usu, msg);
@@ -79,6 +82,20 @@ export default function Conteudo() {
         
         toast.dark('💕 Sala cadastrada!');
         await carregarMensagens();
+    }
+
+    const remover = async (id) => {
+        const r = await api.removerMensagem(id);
+        if (!validarResposta(r)) 
+            return;
+        
+        toast.dark('💕 Mensagem apagada!');
+        await carregarMensagens();
+    }
+
+    async function editar(item) {
+        setMsg(item.ds_mensagem);
+        setIdAlterado(item.id_chat);
     }
     
     return (
@@ -117,6 +134,8 @@ export default function Conteudo() {
                     {chat.map(x =>
                         <div key={x.id_chat}>
                             <div className="chat-message">
+                                <div> <img onClick={() => editar(x)} src="/assets/images/edit.svg" alt=" " style={{cursor: 'pointer'}}/> </div>
+                                <div> <img onClick={() => remover(x.id_chat)} src="/assets/images/delete.svg" alt=" " style={{cursor: 'pointer'}}/> </div>
                                 <div>({new Date(x.dt_mensagem.replace('Z', '')).toLocaleTimeString()})</div>
                                 <div><b>{x.tb_usuario.nm_usuario}</b> fala para <b>Todos</b>:</div>
                                 <div> {x.ds_mensagem} </div>

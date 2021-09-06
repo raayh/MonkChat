@@ -116,6 +116,14 @@ app.post('/chat', async (req, resp) => {
     }
 });
 
+app.get('/chat', async (req, resp) => {
+    try {
+        let chats = await db.tb_chat.findAll();
+        resp.send(chats);
+    } catch (e) {
+        resp.send({ erro: 'Ocorreu um erro_Chat!'})
+    }
+})
 
 app.get('/chat/:sala', async (req, resp) => {
     try {
@@ -138,7 +146,34 @@ app.get('/chat/:sala', async (req, resp) => {
     }
 })
 
+app.delete('/chat/:id', async (req, resp) => {
+    try {
+        let r = await db.tb_chat.destroy({ where: {id_chat: req.params.id } })
+        resp.sendStatus(200);
+    } catch (e) {
+        resp.send({ erro: e.toString() });
+    }
+})
 
+app.put('/chat/:id', async (req, resp) => {
+    try {
+        let id = req.params.id;
+        let mensagem = req.params.mensagem;
+        
+        let r = await db.tb_chat.update(
+            {
+                ds_mensagem: mensagem
+            },            
+            { 
+                where: {id_chat: id } 
+            });
+        
+        resp.sendStatus(200);
+    } catch (e) {
+        resp.send({ erro: e.toString() });
+    }
+})
 
+ 
 app.listen(process.env.PORT,
            x => console.log(`>> Server up at port ${process.env.PORT}`))

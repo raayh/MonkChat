@@ -63,7 +63,7 @@ npm i express cors nodemon sequelize sequelize-auto mysql2
 O comando abaixo mapeará as tabelas do banco de dados em arquivos javascript. Esses arquivos ficarão em uma pasta chamada **models**.
 
 ```shell
-npx sequelize-auto -h localhost -d NOME_DB -u NOME_USU -x SENHA -e mysql -o models -l esm
+npx sequelize-auto -h remotemysql.com -d 5MnijCqZkf -u 5MnijCqZkf -x cXNvMIr556 -e mysql -o models -l esm
 ```
 
 ## Configurar Estrutura de Pastas
