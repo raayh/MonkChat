@@ -28,6 +28,7 @@ export default function Conteudo() {
     const navigation = useHistory();
     let usuarioLogado = lerUsuarioLogado(navigation) || {};
 
+    const [idAlterando, setIdAlterando] = useState(0);
     const [chat, setChat] = useState([]);
     const [sala, setSala] = useState('');
     const [usu] = useState(usuarioLogado.nm_usuario);
@@ -58,11 +59,26 @@ export default function Conteudo() {
         if (event.type === "Keypress" && (!event.ctrlKey || event.charCode !== 13))
             return;
 
-        const resp = await api.inserirMensagem(sala, usu, msg);
-        if (!validarResposta(resp)) 
-            return;
-        
-        toast.dark('💕 Mensagem enviada com sucesso!');
+        if (idAlterando > 0) {
+            
+            const resp = await api.alterarMensagem(idAlterando, msg);
+            if(!validarResposta(resp))
+               return;
+
+            toast.dark('💕 Mensagem alterada com sucesso!');
+            setIdAlterando(0);
+            setMsg('');
+
+        } else {
+
+            const resp = await api.inserirMensagem(sala, usu, msg);
+            if (!validarResposta(resp)) 
+                return;
+            
+            toast.dark('💕 Mensagem enviada com sucesso!');
+
+        }
+
         await carregarMensagens();
     }
 
@@ -93,9 +109,9 @@ export default function Conteudo() {
         await carregarMensagens();
     }
 
-    async function editar(item) {
+    const editar = async (item) => {
         setMsg(item.ds_mensagem);
-        setIdAlterado(item.id_chat);
+        setIdAlterando(item.id_chat);
     }
     
     return (

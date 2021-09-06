@@ -158,7 +158,7 @@ app.delete('/chat/:id', async (req, resp) => {
 app.put('/chat/:id', async (req, resp) => {
     try {
         let id = req.params.id;
-        let mensagem = req.params.mensagem;
+        let mensagem = req.body.mensagem;
         
         let r = await db.tb_chat.update(
             {
