@@ -4,7 +4,7 @@ Projeto desenvolvido durante o curso técnico com o objetivo de aplicar conceito
 
 ## 💡 Funcionalidades
 
-- Shat em tempo real
+- Chat em tempo real
 - Login com nickname 
 
 ## 🔧 Tecnologias Utilizadas
